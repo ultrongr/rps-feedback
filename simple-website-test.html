@@ -56,6 +56,7 @@
     client.on("message", (topic, message) => {
       // navigator.vibrate([900, 900, 900]);
       values = message.toString().split(",");
+      console.log([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])]);
       navigator.vibrate([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])]);
       
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
