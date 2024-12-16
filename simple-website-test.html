@@ -55,8 +55,8 @@
     // On message arrival
     client.on("message", (topic, message) => {
       // navigator.vibrate([900, 900, 900]);
-      values = message.toString().split(",");
-      console.log([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])]);
+      const values = message.toString().split(",");
+      const parsedValues = values.map(value => parseInt(value));
       
       if(!navigator.vibrate([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])])){
         console.log("Vibration not supported");
