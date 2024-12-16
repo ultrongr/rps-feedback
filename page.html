@@ -55,15 +55,34 @@
     // On message arrival
     client.on("message", (topic, message) => {
       // navigator.vibrate([900, 900, 900]);
-      const values = message.toString().split(",");
+      const values = message.toString().split(",").slice(0, -1);
       const parsedValues = values.map(value => parseInt(value));
       
+      switch(message){
+        case "win":
+          color = "green";
+          break;
+        case "lose":
+          color = "red";
+          break;
+        case "draw":
+          color = "lightblue";
+          break;
+        case "explicit":
+          color = "purple";
+          break;
+        default:
+          color = "white";
+          break;
+      }
+
       if(!navigator.vibrate(parsedValues)){
         console.log("Vibration not supported");
-        document.body.style.backgroundColor = "red";
+        document.body.style.backgroundColor = "yellow";
       } else {
         console.log("Vibrated");
-        document.body.style.backgroundColor = "white";
+        // document.body.style.backgroundColor = "white";
+        document.style.backgroundColor = color;
       }
       
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
