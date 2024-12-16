@@ -55,10 +55,11 @@
     // On message arrival
     client.on("message", (topic, message) => {
       // navigator.vibrate([900, 900, 900]);
+      const result = message.toString().split(",").pop();
       const values = message.toString().split(",").slice(0, -1);
       const parsedValues = values.map(value => parseInt(value));
       
-      switch(message){
+      switch(result){
         case "win":
           color = "green";
           break;
