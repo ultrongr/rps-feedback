@@ -58,7 +58,7 @@
       const values = message.toString().split(",");
       const parsedValues = values.map(value => parseInt(value));
       
-      if(!navigator.vibrate([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])])){
+      if(!navigator.vibrate(parsedValues)){
         console.log("Vibration not supported");
         document.body.style.backgroundColor = "red";
       } else {
