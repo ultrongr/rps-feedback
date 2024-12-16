@@ -54,7 +54,10 @@
 
     // On message arrival
     client.on("message", (topic, message) => {
-      navigator.vibrate([900, 900, 900]);
+      // navigator.vibrate([900, 900, 900]);
+      values = message.toString().split(",");
+      navigator.vibrate([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])]);
+      
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
       const msgElement = document.createElement("div");
       msgElement.textContent = "Vibrated" + msg;
