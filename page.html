@@ -87,4 +87,23 @@
       
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
       const msgElement = document.createElement("div");
-      msgElement.textContent =
+      msgElement.textContent = "Vibrated" + msg;
+      messagesDiv.appendChild(msgElement);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
+    });
+
+    // On error
+    client.on("error", (err) => {
+      console.error("Connection error", err);
+      statusSpan.textContent = "Error";
+      statusSpan.style.color = "red";
+    });
+
+    // On disconnect
+    client.on("close", () => {
+      statusSpan.textContent = "Disconnected";
+      statusSpan.style.color = "red";
+    });
+  </script>
+</body>
+</html>
