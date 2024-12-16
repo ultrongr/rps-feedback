@@ -1,66 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic JavaScript Website</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-        }
-        header {
-            background: #6200ea;
-            color: white;
-            padding: 1em;
-            width: 100%;
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #6200ea;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #3700b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MQTT Web Client</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    #messages {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      height: 200px;
+      overflow-y: auto;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My JavaScript Website</h1>
-    </header>
+  <h1>MQTT Web Client</h1>
+  <p>Status: <span id="status">Disconnected</span></p>
+  <div id="messages">Messages will appear here...</div>
 
-    <main>
-        <p id="message">Click the button to see a message!</p>
-        <button onclick="showMessage()">Click Me</button>
-    </main>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script>
+    const brokerUrl = "wss://test.mosquitto.org:8081"; // Public MQTT broker
+    const topic = "test/topic"; // Replace with your topic
 
-    <script>
-        function showMessage() {
-            const messageElement = document.getElementById('message');
-            var supportsVibrate = "vibrate" in navigator;
-            if (supportsVibrate) {
-                // navigator.vibrate(10000);
-                navigator.vibrate([3000, 1000, 1000]);
-                messageElement.textContent = "Vibrator supported 3|1|1";
+    // Connect to the broker
+    const client = mqtt.connect(brokerUrl);
 
-            } else {
-                messageElement.textContent = "Vibrator not supported!";
-            }
-            
+    // Elements for status and messages
+    const statusSpan = document.getElementById("status");
+    const messagesDiv = document.getElementById("messages");
+
+    // On connection
+    client.on("connect", () => {
+      statusSpan.textContent = "Connected";
+      statusSpan.style.color = "green";
+      console.log("Connected to broker");
+
+      // Subscribe to a topic
+      client.subscribe(topic, (err) => {
+        if (err) {
+          console.error("Subscription error", err);
+        } else {
+          console.log(`Subscribed to topic: ${topic}`);
         }
-    </script>
+      });
+    });
+
+    // On message arrival
+    client.on("message", (topic, message) => {
+      const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
+      const msgElement = document.createElement("div");
+      msgElement.textContent = msg;
+      messagesDiv.appendChild(msgElement);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
+    });
+
+    // On error
+    client.on("error", (err) => {
+      console.error("Connection error", err);
+      statusSpan.textContent = "Error";
+      statusSpan.style.color = "red";
+    });
+
+    // On disconnect
+    client.on("close", () => {
+      statusSpan.textContent = "Disconnected";
+      statusSpan.style.color = "red";
+    });
+  </script>
 </body>
 </html>
