@@ -52,6 +52,7 @@
             const messageElement = document.getElementById('message');
             var supportsVibrate = "vibrate" in navigator;
             if (supportsVibrate) {
+                navigator.vibrate(1000);
                 navigator.vibrate([200, 100, 200]);
                 messageElement.textContent = "Vibrator supported!";
 
