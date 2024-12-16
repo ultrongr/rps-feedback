@@ -61,6 +61,9 @@
       if(!navigator.vibrate([parseInt(values[0]), parseInt(values[1]), parseInt(values[2])])){
         console.log("Vibration not supported");
         document.body.style.backgroundColor = "red";
+      } else {
+        console.log("Vibrated");
+        document.body.style.backgroundColor = "white";
       }
       
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
