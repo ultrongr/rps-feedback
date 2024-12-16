@@ -26,9 +26,7 @@
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   <script>
-    // const brokerUrl = "wss://test.mosquitto.org:8081"; // Public MQTT broker
-    // const brokerUrl = "wss://broker.hivemq.com:8000"
-    const brokerUrl = "wss://broker.emqx.io:8083"
+    const brokerUrl = "wss://broker.hivemq.com:8000/mqtt"; // Updated to correct WebSocket URL
     const topic = "hci_2024"; // Replace with your topic
 
     // Connect to the broker
@@ -56,12 +54,12 @@
 
     // On message arrival
     client.on("message", (topic, message) => {
-      // navigator.vibrate([900, 900, 900]);
       const result = message.toString().split(",").pop();
       const values = message.toString().split(",").slice(0, -1);
       const parsedValues = values.map(value => parseInt(value));
       
-      switch(result){
+      let color;
+      switch (result) {
         case "win":
           color = "green";
           break;
@@ -79,12 +77,11 @@
           break;
       }
 
-      if(!navigator.vibrate(parsedValues)){
+      if (!navigator.vibrate(parsedValues)) {
         console.log("Vibration not supported");
         document.body.style.backgroundColor = "yellow";
       } else {
         console.log("Vibrated");
-        // document.body.style.backgroundColor = "white";
         document.body.style.backgroundColor = color;
       }
       
