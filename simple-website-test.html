@@ -57,7 +57,7 @@
       navigator.vibrate([3000, 1000,1000]);
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
       const msgElement = document.createElement("div");
-      msgElement.textContent = msg;
+      msgElement.textContent = "Vibrated" + msg;
       messagesDiv.appendChild(msgElement);
       messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
     });
