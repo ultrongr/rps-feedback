@@ -31,7 +31,7 @@
     const topic = "hci_2024"; // Replace with your topic
 
     // Connect to the broker
-    const client = mqtt.connect(brokerUrl);
+    const client = mqtt.connect(brokerUrl, rejectUnauthorized: false);
 
     // Elements for status and messages
     const statusSpan = document.getElementById("status");
