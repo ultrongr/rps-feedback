@@ -26,7 +26,7 @@
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   <script>
-    const brokerUrl = "wss://test.mosquitto.org:8081"; // Public MQTT broker
+    const brokerUrl = "wss://broker.hivemq.com:8000/mqtt"; // Alternative broker
     const topic = "hci_2024"; // Replace with your topic
 
     // Connect to the broker
@@ -54,11 +54,11 @@
 
     // On message arrival
     client.on("message", (topic, message) => {
-      // navigator.vibrate([900, 900, 900]);
       const result = message.toString().split(",").pop();
       const values = message.toString().split(",").slice(0, -1);
       const parsedValues = values.map(value => parseInt(value));
       
+      let color;
       switch(result){
         case "win":
           color = "green";
@@ -82,29 +82,9 @@
         document.body.style.backgroundColor = "yellow";
       } else {
         console.log("Vibrated");
-        // document.body.style.backgroundColor = "white";
         document.body.style.backgroundColor = color;
       }
       
       const msg = `${new Date().toLocaleTimeString()} - ${topic}: ${message}`;
       const msgElement = document.createElement("div");
-      msgElement.textContent = "Vibrated" + msg;
-      messagesDiv.appendChild(msgElement);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
-    });
-
-    // On error
-    client.on("error", (err) => {
-      console.error("Connection error", err);
-      statusSpan.textContent = "Error";
-      statusSpan.style.color = "red";
-    });
-
-    // On disconnect
-    client.on("close", () => {
-      statusSpan.textContent = "Disconnected";
-      statusSpan.style.color = "red";
-    });
-  </script>
-</body>
-</html>
+      msgElement.textContent =
